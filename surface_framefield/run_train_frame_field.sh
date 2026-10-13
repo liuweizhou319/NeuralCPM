@@ -16,7 +16,7 @@ PYTHON="${PYTHON:-python}"
 
 # Mesh and output.  Other meshes in data/:
 #   fandisk, vase_line, gargoyle, Bunny
-MODEL_NAME="rockerarm"
+MODEL_NAME="Bunny"
 MESH="$ROOT/data/${MODEL_NAME}.obj"
 OUT_DIR="$ROOT/results/${MODEL_NAME}"
 OUTPUT_NPZ="${MODEL_NAME}.npz"     # face-center field, written to OUT_DIR

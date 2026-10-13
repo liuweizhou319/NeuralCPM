@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Written by polyscope into the folder a viewer is started from
+.polyscope.ini
+imgui.ini
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

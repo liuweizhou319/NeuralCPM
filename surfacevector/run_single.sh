@@ -21,7 +21,7 @@ PYTHON="${PYTHON:-python}"
 #   99276_thin_star_2.obj + 99276_thin_star_2_constraints.npz
 #   37384.obj + 37384_constraints_v0.npz
 MESH="$ROOT/data/78481root_5w.obj"
-CONSTRAINTS="$ROOT/data/78481root_5w_constraints_v3.npz"
+CONSTRAINTS="$ROOT/data/78481root_5w.contraints_k5.npz"
 OUT_DIR="$ROOT/results/single/78481root_5w"
 
 # Rotation angle of the anchors in their tangent planes (radians)
