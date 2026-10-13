@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Outputs created by the scripts
+results/
+# Default output locations of train_basis_time.py when it is called by hand
+# without --out-dir / --save-dir
+time_basis_results/
+checkpts_time_basis/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

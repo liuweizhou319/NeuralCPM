@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Outputs created by the scripts
+results/
+# Default output locations of train_screen.py and fem_screen.py when they are
+# called by hand without --out-dir / --out
+screen_results/
+fem_results/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

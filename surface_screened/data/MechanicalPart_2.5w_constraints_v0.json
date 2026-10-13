@@ -1,0 +1,56 @@
+[
+  {
+    "type": "vertex",
+    "ids": [
+      11801
+    ],
+    "value": 2.0,
+    "weight": 1.0,
+    "patch_radius": 0.02
+  },
+  {
+    "type": "vertex",
+    "ids": [
+      10182
+    ],
+    "value": -2.0,
+    "weight": 1.0,
+    "patch_radius": 0.02
+  },
+  {
+    "type": "vertex",
+    "ids": [
+      5600
+    ],
+    "value": 1.0,
+    "weight": 1.0,
+    "patch_radius": 0.02
+  },
+  {
+    "type": "vertex",
+    "ids": [
+      309
+    ],
+    "value": -1.0,
+    "weight": 1.0,
+    "patch_radius": 0.02
+  },
+  {
+    "type": "vertex",
+    "ids": [
+      6639
+    ],
+    "value": -2.0,
+    "weight": 1.0,
+    "patch_radius": 0.02
+  },
+  {
+    "type": "vertex",
+    "ids": [
+      6486
+    ],
+    "value": 2.0,
+    "weight": 1.0,
+    "patch_radius": 0.02
+  }
+]

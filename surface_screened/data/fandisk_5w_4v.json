@@ -1,0 +1,38 @@
+[
+  {
+    "type": "vertex",
+    "ids": [
+      11830
+    ],
+    "value": 2.0,
+    "weight": 1.0,
+    "patch_radius": 0.02
+  },
+  {
+    "type": "vertex",
+    "ids": [
+      9482
+    ],
+    "value": -1.0,
+    "weight": 1.0,
+    "patch_radius": 0.02
+  },
+  {
+    "type": "vertex",
+    "ids": [
+      6245
+    ],
+    "value": -2.0,
+    "weight": 1.0,
+    "patch_radius": 0.02
+  },
+  {
+    "type": "vertex",
+    "ids": [
+      17966
+    ],
+    "value": 1.0,
+    "weight": 1.0,
+    "patch_radius": 0.02
+  }
+]

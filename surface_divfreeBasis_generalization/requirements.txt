@@ -1,0 +1,13 @@
+# Neural divergence-free eigenbasis on a family of shapes - Python 3.10.
+#
+# Install the PyTorch build that matches your CUDA version, see
+# https://pytorch.org/get-started/locally/
+torch
+numpy
+matplotlib      # imported by SurfaceDFVecLaplacianBasis.py (plot helpers)
+
+# Advection scripts only
+fcpw            # closest-point queries on the mesh
+
+# Optional, install by hand:
+#   polyscope        interactive viewers (--vis, vis_advection_time.py, surfaces.py); needs a display

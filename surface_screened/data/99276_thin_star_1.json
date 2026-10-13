@@ -1,0 +1,10 @@
+[
+  {
+    "type": "disk_curve",
+    "seed": 2028,
+    "radius": 0.2,
+    "value": 1.0,
+    "weight": 1.0,
+    "generalize": false
+  }
+]

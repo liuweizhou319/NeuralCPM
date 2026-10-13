@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Outputs created by the scripts
+results/
+# Default output location of train_frame_field.py when it is called by hand
+# without --out-dir
+frame_field_results/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

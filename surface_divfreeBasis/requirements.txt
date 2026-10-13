@@ -1,0 +1,19 @@
+# Neural divergence-free eigenbasis on surfaces - Python 3.10, Linux x86_64, NVIDIA GPU.
+#
+# PyTorch and fVDB must be installed as a matching pair: an fVDB wheel is built
+# for one PyTorch/CUDA combination ("+pt210.cu128" = PyTorch 2.10.0, CUDA 12.8).
+# For another CUDA version change both lines together, following
+# https://fvdb-core.readthedocs.io/latest/installation.html
+--extra-index-url https://download.pytorch.org/whl/cu128
+--extra-index-url https://d36m13axqqhiit.cloudfront.net/simple
+torch==2.10.0
+# SparseGridFDM_SDF.py uses the GridBatch API of fvdb-core 0.3 - 0.4.
+fvdb-core==0.4.2+pt210.cu128
+
+numpy
+matplotlib      # imported by SurfaceDFVecLaplacianBasis.py (plot helpers)
+fcpw            # closest-point queries for the SDF (CPU BVH)
+libigl          # inside/outside sign of the SDF (used when available)
+
+# Optional, install by hand:
+#   polyscope        interactive viewers (--vis, vis_advection.py); needs a display

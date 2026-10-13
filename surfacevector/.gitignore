@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Outputs created by the scripts
+results/
+# Default output locations of train_vecfield.py when it is called by hand
+# without --out-dir / --save-dir
+vecfield_results/
+checkpts_vecfield/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
