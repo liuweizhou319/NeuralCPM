@@ -34,8 +34,9 @@ the `pip` wheel of fcpw and is not an error.
 
 ## Training
 
-`run_train_frame_field.sh` has a `parameters` block at the top (mesh, SDF
-resolution, feature curves, schedules, output folder) followed by the Python
+`run_train_frame_field.sh` has a `parameters` block at the top (mesh and
+output folder, SDF grid, network, learning rate, number of epochs, sample
+counts, loss weights, feature curves, schedules) followed by the Python
 command it runs. Edit the block, then run the script from this folder:
 
 ```bash
@@ -43,16 +44,14 @@ bash run_train_frame_field.sh
 CUDA_VISIBLE_DEVICES=1 bash run_train_frame_field.sh        # choose the GPU
 ```
 
-As shipped it trains on `data/rockerarm.obj`; `MODEL_NAME` selects another
-mesh of `data/`. The number of epochs (10,000), the sample counts and the
-loss weights are set in `train_frame_field.py`, in the call of
-`trainer.train(...)`.
+As shipped it trains on `data/Bunny.obj` for 10,000 epochs; `MODEL_NAME`
+selects another mesh of `data/`.
 
-Output in `results/rockerarm/`:
+Output in `results/Bunny/`:
 
 | File | Content |
 |---|---|
-| `rockerarm.npz` | the frame field at the face centers (see below) |
+| `Bunny.npz` | the frame field at the face centers (see below) |
 | `model.pt` | network checkpoint |
 | `frame_field.png`, `frame_field.npz` | a plot of the field at random surface samples, and its data |
 | `checkpoints/` | intermediate checkpoints |
@@ -92,10 +91,9 @@ Mesh_geometry.py            mesh loading, normalization, surface sampling
 
 * **Checkpoints** are read with `torch.load`, which unpickles arbitrary
   objects. Only load checkpoints you trust.
-* The SDF settings (resolution `SDF_RES`; padding 0.15 and a halo of 4 voxels,
-  set in `train_frame_field.py`) are not stored in `model.pt`. A script that
-  reloads a checkpoint has to rebuild the SDF with the settings of the
-  training run.
+* The SDF settings (`SDF_RES`, `SDF_PADDING`, `FD_HALO`) are not stored in
+  `model.pt`. A script that reloads a checkpoint has to rebuild the SDF with
+  the settings of the training run.
 * **Meshes** should be closed, consistently oriented triangle meshes in OBJ
   format; only `v` and `f` lines are read.
 

@@ -10,8 +10,8 @@ scalars of the file (rotation angle, alignment and smoothness terms).
 
 Example:
   python vis_framefield_npz.py
-  python vis_framefield_npz.py ../surface_framefield/results/rockerarm/rockerarm.npz
-  python vis_framefield_npz.py ../surface_framefield/results/rockerarm/rockerarm.npz --length 0.008
+  python vis_framefield_npz.py ../surface_framefield/results/Bunny/Bunny.npz
+  python vis_framefield_npz.py ../surface_framefield/results/Bunny/Bunny.npz --length 0.008
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ import numpy as np
 
 # Default: the result of surface_framefield/run_train_frame_field.sh
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_NPZ = ROOT / "surface_framefield/results/rockerarm/rockerarm.npz"
+DEFAULT_NPZ = ROOT / "surface_framefield/results/Bunny/Bunny.npz"
 
 # Per-face scalars of the file
 SCALARS = ("theta", "w_curv", "feat_align", "feat_align_weighted",

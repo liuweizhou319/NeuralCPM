@@ -17,21 +17,30 @@ Pipeline:
     Step 2: Train dual potentials u(x,n), v(x,n)
 
 CLI: ``--dual-surface-smooth`` - random surface samples use kNN SH smoothness; all face barycenters
-use SH Dirichlet along **vertex-ring** face pairs (see SurfaceFrameFieldSH.train).
+use SH Dirichlet along edge-adjacent face pairs (see SurfaceFrameFieldSH.train).
 
-CLI: ``--surface-placement per_face_adj`` - one random point **per triangle** each epoch; surface
-smoothness uses **vertex-ring** face pairs (sparse, O(|F|) pairs), not Euclidean kNN. Default ``random``.
+CLI: ``--surface-placement per_face_adj`` (default) - one random point **per triangle** each epoch;
+surface smoothness uses edge-adjacent face pairs (sparse, O(|F|) pairs), not Euclidean kNN.
+``--surface-placement random`` - ``--num-surface`` random points, Euclidean kNN smoothness.
 
 CLI: ``--curv-weight-mode scale01|bottom_floor`` - rescale ``|||kappa_1|-|kappa_2|||`` to feature weights in
 ``[0,1]`` (needs ``--feat-align-weight abs_abs_diff``). ``scale01`` = min-max per batch;
 ``bottom_floor`` uses ``--curv-weight-floor`` and ``--curv-bottom-q`` (same as ``test_crossfield``).
 
-CLI: ``--lr-schedule cosine`` (default) - ``CosineAnnealingLR`` from ``lr=1e-3`` to ``1e-6``.
-``--lr-schedule fixed`` - constant ``5e-5``, no scheduler.
+CLI: ``--lr-schedule fixed`` (default) - constant ``--lr-fixed`` (default ``5e-5``), no scheduler.
+``--lr-schedule cosine`` - ``CosineAnnealingLR`` from ``--lr`` (default ``1e-3``) to ``1e-6``.
 
-CLI: ``--cpm-schedule fixed`` (default) - ``lambda_cpm`` constant. ``--cpm-schedule ramp`` -
-weight ``0`` for the first ``--cpm-ramp-hold-frac`` fraction of training (default ``0.2``),
-then linear from ``--lambda-cpm-ramp-start`` (default ``0``) to ``lambda_cpm`` over the rest.
+CLI: ``--cpm-schedule ramp`` (default) - weight ``0`` for the first ``--cpm-ramp-hold-frac``
+fraction of training (default ``0.2``), then linear from ``--lambda-cpm-ramp-start``
+(default ``0``) to ``--lambda-cpm`` over the rest. ``--cpm-schedule fixed`` - ``--lambda-cpm``
+constant.
+
+CLI: grid, network, sampling and loss weights (the defaults are the values of the experiments):
+``--sdf-padding 0.15``, ``--fd-halo 4``; ``--hidden 128``, ``--n-layers 4``;
+``--num-epochs 10000``, ``--num-narrowband 30000``, ``--band-width 0.015``, ``--clip-grad 1.0``,
+``--log-every 50``, ``--save-every 2000``; ``--num-surface 30000`` and ``--knn-k 6`` (both used
+only with ``--surface-placement random``); ``--lambda-smooth 100``, ``--lambda-feat 100``,
+``--lambda-feat-edge 100``, ``--lambda-cpm 100``.
 
 CLI: ``--output-npz`` / ``--export-npz`` - same option (alias): filename or path for
 ``evaluate_mesh_face_centers`` output. Default is ``<mesh_basename>.npz`` under
@@ -63,6 +72,13 @@ import torch
 from Mesh_geometry import MeshGeometry
 from SparseGridFDM_SDF import SparseGridFDM_SDF
 from SurfaceFrameFieldSH import SurfaceFrameFieldSH, extract_feature_curves
+
+
+def arg_value(flag, default, cast=float):
+    """Value given after ``flag`` on the command line, or ``default``."""
+    if flag in sys.argv:
+        return cast(sys.argv[sys.argv.index(flag) + 1])
+    return default
 
 
 def main():
@@ -208,6 +224,26 @@ def main():
             "--feat-schedule-plateau-start / --feat-schedule-plateau-end must satisfy "
             "0 < start < end < 1.")
 
+    # Grid, network, sampling and loss weights (defaults: the values of the experiments)
+    sdf_padding = arg_value('--sdf-padding', 0.15)
+    fd_halo = arg_value('--fd-halo', 4, int)
+    hidden = arg_value('--hidden', 128, int)
+    n_layers = arg_value('--n-layers', 4, int)
+    lr = arg_value('--lr', 1e-3)
+    lr_fixed = arg_value('--lr-fixed', 5e-5)
+    num_epochs = arg_value('--num-epochs', 10000, int)
+    num_surface = arg_value('--num-surface', 30000, int)
+    num_narrowband = arg_value('--num-narrowband', 30000, int)
+    band_width = arg_value('--band-width', 0.015)
+    knn_k = arg_value('--knn-k', 6, int)
+    clip_grad = arg_value('--clip-grad', 1.0)
+    log_every = arg_value('--log-every', 50, int)
+    save_every = arg_value('--save-every', 2000, int)
+    lambda_smooth = arg_value('--lambda-smooth', 100.0)
+    lambda_feat = arg_value('--lambda-feat', 100.0)
+    lambda_feat_edge = arg_value('--lambda-feat-edge', 100.0)
+    lambda_cpm = arg_value('--lambda-cpm', 100.0)
+
     # ================================================================
     # Step 0: Load mesh & build fixed oracle
     # ================================================================
@@ -218,7 +254,7 @@ def main():
     mesh = MeshGeometry(mesh_path, normalize=True, device=device)
 
     oracle = SparseGridFDM_SDF.from_mesh(
-        mesh, resolution=sdf_res, padding=0.15, fd_halo=4, device=device)
+        mesh, resolution=sdf_res, padding=sdf_padding, fd_halo=fd_halo, device=device)
 
     # ================================================================
     # Step 1: Extract feature curves (optional)
@@ -248,10 +284,10 @@ def main():
 
     trainer = SurfaceFrameFieldSH(
         sdf_oracle=oracle,
-        hidden=128,
-        n_layers=4,
+        hidden=hidden,
+        n_layers=n_layers,
         omega_0=30.0,
-        lr=1e-3,
+        lr=lr,
         device=device,
     )
 
@@ -260,33 +296,34 @@ def main():
         feat_pts_np=feat_pts,
         feat_tangents_np=feat_tangents,
         feat_face_pairs_np=feat_face_pairs,
-        num_epochs=10000,
-        num_surface=30000,
-        num_narrowband=30000,
-        lambda_smooth=100.0,
-        lambda_feat=100.0,
-        lambda_feat_edge=100.0,
-        lambda_cpm=100.0,
+        num_epochs=num_epochs,
+        num_surface=num_surface,
+        num_narrowband=num_narrowband,
+        lambda_smooth=lambda_smooth,
+        lambda_feat=lambda_feat,
+        lambda_feat_edge=lambda_feat_edge,
+        lambda_cpm=lambda_cpm,
         cpm_schedule=cpm_schedule,
         lambda_cpm_ramp_start=lambda_cpm_ramp_start,
         cpm_ramp_hold_frac=cpm_ramp_hold_frac,
         lambda_amp=0.0,
         tau_amp=0.0,
-        band_width=0.015,
-        knn_k=6,
+        band_width=band_width,
+        knn_k=knn_k,
         smooth_p=smooth_p,
-        clip_grad=1.0,
+        clip_grad=clip_grad,
         use_w_curv=True,
         feat_align_weight=feat_align_weight,
         curv_weight_mode=curv_weight_mode,
         curv_weight_floor=curv_weight_floor,
         curv_bottom_quantile=curv_bottom_q,
-        log_every=50,
-        save_every=2000,
+        log_every=log_every,
+        save_every=save_every,
         save_dir=os.path.join(out_dir, 'checkpoints'),
         dual_surface_smooth=dual_surface_smooth,
         surface_placement=surface_placement,
         lr_schedule=lr_schedule,
+        fixed_lr=lr_fixed,
         ref_mode=ref_mode,
         feat_weight_schedule=feat_weight_schedule,
         feat_edge_target=feat_edge_target,

@@ -52,7 +52,7 @@ CUDA_VISIBLE_DEVICES=1 bash run_single.sh        # choose the GPU
 
 Trains the two potentials for the anchors in `CONSTRAINTS`, rotated by the
 fixed angle `THETA` (radians, 0 = as given), and exports the field. As shipped
-it uses `data/78481root_5w.obj` with one anchor.
+it uses `data/78481root_5w.obj` with five anchors.
 
 Output in `results/single/78481root_5w/`: `model.pt`, `vecfield_000.npz` and
 `checkpoints/` (intermediate checkpoints).
@@ -119,7 +119,7 @@ with the same arrays, so the same viewer can show it:
 
 ```bash
 python fem_vector_field_design_reference.py data/78481root_5w.obj \
-    --constraints data/78481root_5w_constraints_v3.npz \
+    --constraints data/78481root_5w.contraints_k5.npz \
     -o results/single/78481root_5w/fem_vecfield.npz
 ```
 

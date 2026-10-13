@@ -60,11 +60,11 @@ python vis_screened_npz.py ../surface_screened/results/single/thin_star_res150_h
 
 `diffusion.npz` is the result of the network and `fem_diffusion.npz` the FEM
 reference; `run_thin_star.sh` and `run_single.sh` write both into
-`results/single/<name>/`.
+`results/single/<name>_res<SDF_RES>_halo<FD_HALO>/`.
 
 | Shown | Content |
 |---|---|
-| `u` | the field on the mesh, with the color range of the constraints |
+| `u` | the field on the mesh, in one color range shared with the constraints |
 | `u (autoscale)` | the same field with its own color range (off at the start) |
 | `\|grad u\|` | norm of the surface gradient, only in `diffusion.npz` (off at the start) |
 | `constraint points`, `constraint curves` | the point and curve sources, colored by their Dirichlet value |
@@ -136,8 +136,8 @@ quantities are the same as for one shape.
 ## Frame field
 
 ```bash
-python vis_framefield_npz.py ../surface_framefield/results/rockerarm/rockerarm.npz
-python vis_framefield_npz.py ../surface_framefield/results/rockerarm/rockerarm.npz --length 0.008
+python vis_framefield_npz.py ../surface_framefield/results/Bunny/Bunny.npz
+python vis_framefield_npz.py ../surface_framefield/results/Bunny/Bunny.npz --length 0.008
 ```
 
 The argument is the face-center file of the run, `<MODEL_NAME>.npz` in the
@@ -158,8 +158,8 @@ samples without the mesh and cannot be shown with this script.
 have the option `--length`: the length of the longest vector, relative to the
 size of the scene. The default is 0.02, and 0.004 for the frame field, where a
 cross is drawn at every face. The `Length` slider of a vector quantity in the
-polyscope window changes it interactively; in the viewers with a slider it
-goes back to `--length` when another field is selected.
+polyscope window changes it interactively; in the two basis viewers it goes
+back to `--length` when another field or shape is selected.
 
 ## Other viewers
 

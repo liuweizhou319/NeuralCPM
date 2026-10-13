@@ -1231,6 +1231,7 @@ class SurfaceFrameFieldSH:
         dual_surface_smooth: bool = False,
         surface_placement: str = "random",
         lr_schedule: str = "cosine",
+        fixed_lr: float = 5e-5,
         ref_mode: str = 'normal',
         feat_weight_schedule: str = "anneal",
         feat_edge_target: str = "mincurv",
@@ -1292,7 +1293,7 @@ class SurfaceFrameFieldSH:
         dev = self.device
         self.model.train()
 
-        _fixed_lr = 5e-5
+        _fixed_lr = fixed_lr
         if lr_schedule == "cosine":
             for g in self.optimizer.param_groups:
                 g["lr"] = self.lr
