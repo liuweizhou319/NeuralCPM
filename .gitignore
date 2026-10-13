@@ -1,0 +1,33 @@
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Generated experiment outputs (including default CLI output directories)
+results/
+Bunny_basis_results/
+checkpts_basis/
+time_basis_results/
+checkpts_time_basis/
+frame_field_results/
+screen_results/
+fem_results/
+vecfield_results/
+checkpts_vecfield/
+
+# Editors and backup files
+.vscode/
+.idea/
+*~
+*.swp
+*.swo
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
