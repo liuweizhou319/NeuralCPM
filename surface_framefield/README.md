@@ -26,11 +26,25 @@ conda activate surface_framefield
 pip install -r requirements.txt
 ```
 
+The CMake build compiles the libigl parameterization tool and the
+[libQEx](https://github.com/hcebke/libQEx) submodule for quad mesh extraction.
+From this directory:
+
+```bash
+./build.sh
+```
+
 `requirements.txt` lists a matching PyTorch / fVDB pair; change both lines
 together for another CUDA version. `SparseGridFDM_SDF.py` uses the `GridBatch`
 API of `fvdb-core` 0.3 - 0.4. Every SDF build prints
 `[fcpw] GPU path failed ... falling back to CPU scene`; this is expected with
 the `pip` wheel of fcpw and is not an error.
+
+The script initializes the libQEx submodule and configures and builds both tools.
+It defaults to a Release build in `build/` with four parallel jobs. Override
+`BUILD_DIR`, `BUILD_TYPE`, or `JOBS` as needed; additional arguments are passed
+to CMake, for example `JOBS=2 ./build.sh -DBUILD_QEX=OFF`.
+
 
 ## Training
 
@@ -48,12 +62,11 @@ Optional steps after training and OBJ/TXT export (build the C++ tools first
 with `./build.sh`):
 
 ```bash
-bash run_train_frame_field.sh --parameterize  # also produce <model>_uv.obj
-bash run_train_frame_field.sh --quad-mesh     # parameterize, then produce <model>_quad.obj
+bash run_train_frame_field.sh --quad_mesh  # parameterize, then extract the quad mesh
 ```
 
-Both steps are off by default. `--quad-mesh` enables parameterization as well,
-since quad extraction needs the UV mesh. All outputs go into the current
+Quad meshing is off by default. `--quad_mesh` runs parameterization followed by
+quad extraction, producing `<model>_uv.obj` and `<model>_quad.obj`. All outputs go into the current
 model's results folder. The parameterization tool opens its viewer after
 writing the UV mesh; close the window to continue to quad extraction.
 Set `BUILD_DIR` if the executables are in a different build directory.
@@ -88,30 +101,6 @@ smoothness and alignment terms.
 The mesh is normalized on loading: its bounding-box center is moved to the
 origin and it is scaled so that its farthest vertex has norm 1.
 
-## Parameterization and quad extraction
-
-The CMake build compiles the libigl parameterization tool and the
-[libQEx](https://github.com/hcebke/libQEx) submodule for quad mesh extraction.
-From this directory:
-
-```bash
-./build.sh
-```
-
-The script initializes the libQEx submodule and configures and builds both tools.
-It defaults to a Release build in `build/` with four parallel jobs. Override
-`BUILD_DIR`, `BUILD_TYPE`, or `JOBS` as needed; additional arguments are passed
-to CMake, for example `JOBS=2 ./build.sh -DBUILD_QEX=OFF`.
-
-On Linux, extract a quad mesh from an OBJ containing per-face UVs with:
-
-```bash
-build/cmdline_tool mesh_with_uv.obj quad_mesh.obj
-```
-
-See [the parameterization README](parameterization_libigl/README.md) for input
-formats, dependencies, and build options. libQEx is distributed under GPLv3;
-its README includes citation information.
 
 ## Files
 

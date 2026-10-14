@@ -16,6 +16,20 @@ example data, scripts, and detailed README.
 | [surface_divfreeBasis_generalization](surface_divfreeBasis_generalization/README.md) | Eigenbasis generalization across a shape family and advection on deforming surfaces | `run_train_basis_time.sh`, `run_advection_time.sh` |
 | [surface_framefield](surface_framefield/README.md) | Smooth, feature-aligned cross/frame field design | `run_train_frame_field.sh` |
 
+## Tested environment
+
+The C++ parameterization and quad extraction tools in `surface_framefield`
+were built and tested on Ubuntu 24.04.2 LTS under WSL2 with:
+
+| Component | Version |
+|---|---|
+| Linux kernel | `5.15.167.4-microsoft-standard-WSL2` |
+| GCC / G++ | `14.2.0` |
+| CMake | `3.28.3` |
+
+See each experiment's README and `requirements.txt` for Python dependencies
+and GPU requirements.
+
 ## Contact
 
 For questions about the paper or code, please contact Weizhou Liu at
