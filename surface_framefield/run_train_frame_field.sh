@@ -5,6 +5,8 @@
 #
 # Usage:
 #   bash run_train_frame_field.sh
+#   bash run_train_frame_field.sh --parameterize
+#   bash run_train_frame_field.sh --quad-mesh
 #   CUDA_VISIBLE_DEVICES=0 bash run_train_frame_field.sh
 
 set -euo pipefail
@@ -12,6 +14,42 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT"
 PYTHON="${PYTHON:-python}"
+BUILD_DIR="${BUILD_DIR:-$ROOT/build}"
+PARAMETERIZE=0
+QUAD_MESH=0
+
+usage() {
+  cat <<'EOF'
+Usage: bash run_train_frame_field.sh [--parameterize] [--quad-mesh]
+
+Always trains the frame field and exports the OBJ mesh and cross-field TXT.
+  --parameterize  Also generate <model>_uv.obj with libigl MIQ.
+  --quad-mesh     Also generate <model>_quad.obj with libQEx; enables parameterization.
+  -h, --help      Show this help.
+
+Build the C++ tools first with ./build.sh. BUILD_DIR overrides their directory.
+The parameterization viewer opens after writing UVs; close it to continue.
+EOF
+}
+
+for arg in "$@"; do
+  case "$arg" in
+    --parameterize) PARAMETERIZE=1 ;;
+    --quad-mesh) QUAD_MESH=1; PARAMETERIZE=1 ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown argument: $arg" >&2; usage >&2; exit 1 ;;
+  esac
+done
+
+# Check requested tools before starting the training run.
+if [[ "$PARAMETERIZE" == "1" && ! -x "$BUILD_DIR/surfaceframefield_igl" ]]; then
+  echo "Missing executable: $BUILD_DIR/surfaceframefield_igl. Run ./build.sh first." >&2
+  exit 1
+fi
+if [[ "$QUAD_MESH" == "1" && ! -x "$BUILD_DIR/cmdline_tool" ]]; then
+  echo "Missing executable: $BUILD_DIR/cmdline_tool. Run ./build.sh first." >&2
+  exit 1
+fi
 
 # ======================== parameters ========================
 
@@ -141,3 +179,18 @@ echo "MODEL: $OUT_DIR/model.pt"
 echo "FIELD: $OUT_DIR/$OUTPUT_NPZ"
 echo "MESH: $OUT_DIR/${OUTPUT_NPZ%.npz}.obj"
 echo "CROSS FIELD: $OUT_DIR/${OUTPUT_NPZ%.npz}_crossfield.txt"
+
+if [[ "$PARAMETERIZE" == "1" ]]; then
+  "$BUILD_DIR/surfaceframefield_igl" \
+    "$OUT_DIR/${OUTPUT_NPZ%.npz}.obj" \
+    "$OUT_DIR/${OUTPUT_NPZ%.npz}_crossfield.txt" \
+    "$OUT_DIR/${OUTPUT_NPZ%.npz}_uv.obj"
+  echo "UV MESH: $OUT_DIR/${OUTPUT_NPZ%.npz}_uv.obj"
+fi
+
+if [[ "$QUAD_MESH" == "1" ]]; then
+  "$BUILD_DIR/cmdline_tool" \
+    "$OUT_DIR/${OUTPUT_NPZ%.npz}_uv.obj" \
+    "$OUT_DIR/${OUTPUT_NPZ%.npz}_quad.obj"
+  echo "QUAD MESH: $OUT_DIR/${OUTPUT_NPZ%.npz}_quad.obj"
+fi

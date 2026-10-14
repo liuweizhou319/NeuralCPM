@@ -44,6 +44,20 @@ bash run_train_frame_field.sh
 CUDA_VISIBLE_DEVICES=1 bash run_train_frame_field.sh        # choose the GPU
 ```
 
+Optional steps after training and OBJ/TXT export (build the C++ tools first
+with `./build.sh`):
+
+```bash
+bash run_train_frame_field.sh --parameterize  # also produce <model>_uv.obj
+bash run_train_frame_field.sh --quad-mesh     # parameterize, then produce <model>_quad.obj
+```
+
+Both steps are off by default. `--quad-mesh` enables parameterization as well,
+since quad extraction needs the UV mesh. All outputs go into the current
+model's results folder. The parameterization tool opens its viewer after
+writing the UV mesh; close the window to continue to quad extraction.
+Set `BUILD_DIR` if the executables are in a different build directory.
+
 As shipped it trains on `data/Bunny.obj` for 10,000 epochs; `MODEL_NAME`
 selects another mesh of `data/`.
 
