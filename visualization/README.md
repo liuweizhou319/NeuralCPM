@@ -13,7 +13,8 @@ pip install numpy polyscope
 ```
 
 The scripts use the polyscope 2 API. polyscope opens a window, so a machine
-with a display is needed.
+with a display is needed (except for the export of the frame field with
+`--no-vis`, see below).
 
 ## Usage
 
@@ -32,7 +33,7 @@ python vis_screened_npz.py ../surface_screened/results/single/thin_star_res150_h
 | `vis_vecfield_angles.py` | vector field design: the field for every angle of the anchors | folder with `vecfield_*.npz` | `surfacevector/run_generalization.sh` |
 | `vis_dfbasis.py` | divergence-free basis on one shape | folder with `basis_*.npz` | `surface_divfreeBasis/run_train_basis.sh` |
 | `vis_dfbasis_generalization.py` | divergence-free basis on a family of shapes | folder with `frame_*/` | `surface_divfreeBasis_generalization/run_train_basis_time.sh` |
-| `vis_framefield_npz.py` | frame field | `<mesh name>.npz` | `surface_framefield/run_train_frame_field.sh` |
+| `vis_framefield_npz.py` | frame field and its singularities; export for `parameterization_libigl` | `<mesh name>.npz` | `surface_framefield/run_train_frame_field.sh` |
 
 The run scripts write into `results/` of their own folder. The commands below
 are run from this folder and use the output names of the run scripts as
@@ -147,10 +148,30 @@ samples without the mesh and cannot be shown with this script.
 | Shown | Content |
 |---|---|
 | `cross` | the frame at every face, drawn as its four directions |
+| `singularities` | the singular vertices of the cross field, colored by their index (red: positive, blue: negative) |
 | `feature curves` | midpoints of the sharp edges, if the run extracted them; `tangent`: directions of these edges (off at the start) |
 | `e1`, `e2` | the two axes of the frame (off at the start) |
 | `t_feat` | direction of minimal curvature that the field is aligned with (off at the start) |
+| `singularity index` | index of the cross field at every vertex, 0 at regular vertices (off at the start) |
 | `theta`, `w_curv`, `feat_align`, `feat_align_weighted`, `smooth_*` | per-face scalars of the file: rotation angle, curvature weight, alignment and smoothness terms (off at the start) |
+
+The number of singular vertices and the sum of their indices are printed in
+the terminal.
+
+### Export for the parameterization
+
+`--export` writes the input of `parameterization_libigl/` next to the npz:
+`<MODEL_NAME>.obj`, the normalized mesh of the file, and
+`<MODEL_NAME>_crossfield.txt`, one line `x1 y1 z1 x2 y2 z2` (`e1` and `e2`)
+per face, in the face order of the OBJ. `--obj-out` and `--field-out` choose
+other paths. With `--no-vis` no window is opened, so the export also runs on
+a machine without a display:
+
+```bash
+python vis_framefield_npz.py ../surface_framefield/results/Bunny/Bunny.npz --export --no-vis
+cd ../parameterization_libigl
+./run.sh ../surface_framefield/results/Bunny/Bunny.obj ../surface_framefield/results/Bunny/Bunny_crossfield.txt
+```
 
 ## Length of the vectors
 
