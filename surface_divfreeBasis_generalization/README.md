@@ -119,12 +119,3 @@ vis_advection_time.py              polyscope player for an advection result
   unpickles arbitrary objects. Only load checkpoints you trust.
 * **Meshes** should be closed, consistently oriented triangle meshes in OBJ
   format; only `v` and `f` lines are read.
-
-## Citation
-
-To be added.
-
-## License
-
-To be added. The meshes in `data/` are included to reproduce the experiments;
-check the terms of the original models before redistributing them.

@@ -52,6 +52,7 @@ Output in `results/Bunny/`:
 | File | Content |
 |---|---|
 | `Bunny.npz` | the frame field at the face centers (see below) |
+| `Bunny.obj`, `Bunny_crossfield.txt` | normalized mesh and per-face frame directions for parameterization, exported automatically after training |
 | `model.pt` | network checkpoint |
 | `frame_field.png`, `frame_field.npz` | a plot of the field at random surface samples, and its data |
 | `checkpoints/` | intermediate checkpoints |
@@ -121,12 +122,3 @@ Mesh_geometry.py            mesh loading, normalization, surface sampling
   the settings of the training run.
 * **Meshes** should be closed, consistently oriented triangle meshes in OBJ
   format; only `v` and `f` lines are read.
-
-## Citation
-
-To be added.
-
-## License
-
-To be added. The meshes in `data/` are included to reproduce the experiments;
-check the terms of the original models before redistributing them.

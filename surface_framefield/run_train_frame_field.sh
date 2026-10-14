@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Frame field on one mesh: build the sparse SDF, extract the
-# feature curves, train the field and export it at the face centers.
+# feature curves, train the field and export it at the face centers,
+# then write the OBJ mesh and cross-field TXT for parameterization.
 #
 # Usage:
 #   bash run_train_frame_field.sh
@@ -133,5 +134,10 @@ fi
 
 "$PYTHON" "$ROOT/train_frame_field.py" "${ARGS[@]}"
 
+"$PYTHON" "$ROOT/../visualization/vis_framefield_npz.py" \
+  "$OUT_DIR/$OUTPUT_NPZ" --export --no-vis
+
 echo "MODEL: $OUT_DIR/model.pt"
 echo "FIELD: $OUT_DIR/$OUTPUT_NPZ"
+echo "MESH: $OUT_DIR/${OUTPUT_NPZ%.npz}.obj"
+echo "CROSS FIELD: $OUT_DIR/${OUTPUT_NPZ%.npz}_crossfield.txt"
