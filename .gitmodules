@@ -1,0 +1,3 @@
+[submodule "surface_framefield/libQEx"]
+	path = surface_framefield/libQEx
+	url = https://github.com/hcebke/libQEx.git

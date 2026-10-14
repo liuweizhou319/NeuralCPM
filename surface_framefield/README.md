@@ -73,6 +73,31 @@ smoothness and alignment terms.
 The mesh is normalized on loading: its bounding-box center is moved to the
 origin and it is scaled so that its farthest vertex has norm 1.
 
+## Parameterization and quad extraction
+
+The CMake build compiles the libigl parameterization tool and the
+[libQEx](https://github.com/hcebke/libQEx) submodule for quad mesh extraction.
+From this directory:
+
+```bash
+./build.sh
+```
+
+The script initializes the libQEx submodule and configures and builds both tools.
+It defaults to a Release build in `build/` with four parallel jobs. Override
+`BUILD_DIR`, `BUILD_TYPE`, or `JOBS` as needed; additional arguments are passed
+to CMake, for example `JOBS=2 ./build.sh -DBUILD_QEX=OFF`.
+
+On Linux, extract a quad mesh from an OBJ containing per-face UVs with:
+
+```bash
+build/cmdline_tool mesh_with_uv.obj quad_mesh.obj
+```
+
+See [the parameterization README](parameterization_libigl/README.md) for input
+formats, dependencies, and build options. libQEx is distributed under GPLv3;
+its README includes citation information.
+
 ## Files
 
 ```

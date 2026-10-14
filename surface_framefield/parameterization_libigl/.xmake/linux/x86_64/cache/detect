@@ -1,0 +1,8 @@
+{
+    find_program = {
+        ping = "/usr/bin/ping",
+        zig = false,
+        git = "/usr/bin/git",
+        gcc = "/usr/bin/gcc"
+    }
+}

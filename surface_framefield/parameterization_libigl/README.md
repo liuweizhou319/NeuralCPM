@@ -10,6 +10,58 @@ Pipeline:
 
 ## Build
 
+### CMake (Linux or Windows)
+
+From the repository root:
+
+```bash
+cmake -S surface_framefield -B surface_framefield/build -DCMAKE_BUILD_TYPE=Release
+cmake --build surface_framefield/build --config Release --parallel 2
+```
+
+Before configuring a fresh clone, initialize the libQEx submodule:
+
+```bash
+git submodule update --init --recursive
+```
+
+The default build also compiles [libQEx](https://github.com/hcebke/libQEx) into
+the `QEx` shared and `QExStatic` static libraries. It uses an installed OpenMesh
+CMake package when available, or downloads OpenMesh 9.0 otherwise. On Linux,
+it also builds `cmdline_tool` and `demo_minimal_c`. To build only the
+parameterization executable, configure with `-DBUILD_QEX=OFF`.
+
+After generating an OBJ with UVs, extract a quad mesh on Linux with:
+
+```bash
+surface_framefield/build/cmdline_tool <mesh_with_uv.obj> <quad_mesh.obj>
+```
+
+CMake uses the bundled libigl, Eigen, GMM, and CoMISo sources and downloads
+Polyscope v2.5.0 with its submodules on the first configure. It requires a C++17
+compiler, CMake 3.18 or newer, and Git. On Ubuntu, the viewer build also needs
+OpenGL and X11 development packages:
+
+```bash
+sudo apt install build-essential cmake git libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
+```
+
+To use an existing Polyscope source checkout with initialized submodules, pass
+`-DPOLYSCOPE_SOURCE_DIR=/path/to/polyscope`. Override the bundled libigl location
+with `-DLIBIGL_ROOT=/path/to/libigl` if needed.
+
+On Linux, run the executable directly (from the repository root):
+
+```bash
+surface_framefield/build/surfaceframefield_igl <mesh.obj> <framefield.txt> [out.obj]
+```
+
+With a multi-configuration generator such as Visual Studio, the executable is
+in `surface_framefield/build/Release/`. The existing wrapper scripts below use
+the xmake output location.
+
+### xmake (Windows)
+
 Requires [xmake](https://xmake.io) and MSVC.
 
 ```bash

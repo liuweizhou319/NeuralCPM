@@ -4,6 +4,7 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Outputs created by the scripts
+build/
 results/
 # Default output location of train_frame_field.py when it is called by hand
 # without --out-dir

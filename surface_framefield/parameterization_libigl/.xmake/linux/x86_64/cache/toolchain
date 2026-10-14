@@ -1,0 +1,22 @@
+{
+    tool_target_surfaceframefield_igl_linux_x86_64_cxx = {
+        toolchain_info = {
+            name = "gcc",
+            cachekey = "gcc_arch_x86_64_plat_linux",
+            arch = "x86_64",
+            plat = "linux"
+        },
+        toolname = "gcc",
+        program = "/usr/bin/gcc"
+    },
+    tool_target_comiso_linux_x86_64_cxx = {
+        toolchain_info = {
+            name = "gcc",
+            cachekey = "gcc_arch_x86_64_plat_linux",
+            arch = "x86_64",
+            plat = "linux"
+        },
+        toolname = "gcc",
+        program = "/usr/bin/gcc"
+    }
+}
